@@ -34,10 +34,19 @@ class Autoservice
 
     public void Start()
     {
-        while (_cars.Count > 0)
+        while (_cars.Count > 0 || _money <= 0)
         {
             ShowInfo();
             ServiceCar();
+        }
+
+        if (_money == 0)
+        {
+            Console.WriteLine("Вы банкрот.");
+        }
+        else
+        {
+            Console.WriteLine("Все машины отремонтированы.");
         }
 
         Console.ReadLine();
@@ -71,13 +80,19 @@ class Autoservice
         }
         else if (isFound && isNeedReplacement == false)
         {
-            Console.WriteLine("Вы заменили ненужную деталь!");
+            Console.WriteLine("Вы заменили хорошую деталь!");
             CompensateForDamage(damagedCarPart.Price);
+
+            if (_money < 0)
+                _money = 0;
         }
         else
         {
             Console.WriteLine($"{damagedCarPart.Name} закончились на складе!");
             PayFine();
+
+            if (_money < 0)
+                _money = 0;
         }
     }
 
