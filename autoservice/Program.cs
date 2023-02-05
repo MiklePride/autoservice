@@ -82,18 +82,15 @@ class Autoservice
         {
             Console.WriteLine("Вы заменили хорошую деталь!");
             CompensateForDamage(damagedCarPart.Price);
-
-            if (_money < 0)
-                _money = 0;
         }
         else
         {
             Console.WriteLine($"{damagedCarPart.Name} закончились на складе!");
             PayFine();
-
-            if (_money < 0)
-                _money = 0;
         }
+
+        if (_money < 0)
+            _money = 0;
     }
 
     private void AcceptPayment(int priceCarPart)
