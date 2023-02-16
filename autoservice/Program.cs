@@ -8,7 +8,7 @@ namespace autoservice
         static void Main(string[] args)
         {
             Autoservice autoservice = new Autoservice();
-            autoservice.Start();
+            autoservice.Work();
         }
     }
 }
@@ -18,7 +18,7 @@ class Autoservice
     private Queue<Car> _cars = new Queue<Car>();
     private Warehouse _warehouse = new Warehouse();
 
-    private int _money = 50000;
+    private int _money = 25000;
     private int _pricePerJob = 3000;
     private int _carsCount = 0;
 
@@ -32,9 +32,9 @@ class Autoservice
         }
     }
 
-    public void Start()
+    public void Work()
     {
-        while (_cars.Count > 0 || _money <= 0)
+        while (_cars.Count > 0 && _money > 0)
         {
             ShowInfo();
             ServiceCar();
@@ -71,7 +71,7 @@ class Autoservice
     private void RepairCarPart(CarPart damagedCarPart)
     {
         bool isNeedReplacement = damagedCarPart.IsDamaged == true;
-        bool isFound = _warehouse.TryGetCarPart(ref damagedCarPart);
+        bool isFound = _warehouse.TryGetCarPart(out damagedCarPart, damagedCarPart.Name);
 
         if (isFound && isNeedReplacement)
         {
@@ -132,21 +132,20 @@ class Warehouse
         }
     }
 
-    public bool TryGetCarPart(ref CarPart carPart)
+    public bool TryGetCarPart(out CarPart carPart, string carPartName)
     {
+        carPart = null;
         bool isFound = false;
 
         for (int i = 0; i < _CarParts.Count; i++)
         {
-            if (_CarParts[i].Name == carPart.Name)
+            if (_CarParts[i].Name == carPartName)
             {
                 carPart = _CarParts[i];
 
                 _CarParts.RemoveAt(i);
 
-                isFound = true;
-
-                break;
+                return true;
             }
         }
 
@@ -173,7 +172,6 @@ class Warehouse
 class Car
 {
     private static Random _random = new Random();
-
     private List<CarPart> _carParts = new List<CarPart>();
 
     public Car()
@@ -244,12 +242,12 @@ class Car
 
 abstract class CarPart
 {
-    protected string _condition;
+    protected string Condition;
 
     public CarPart()
     {
         IsDamaged = false;
-        _condition = "Отличное";
+        Condition = "Отличное";
     }
 
     public string Name { get; protected set; }
@@ -260,13 +258,13 @@ abstract class CarPart
 
     public void ShowInfo()
     {
-        Console.WriteLine($"Деталь: {Name}  |  Цена: {Price}  |  Состояние:{_condition}");
+        Console.WriteLine($"Деталь: {Name}  |  Цена: {Price}  |  Состояние:{Condition}");
     }
 
     public void BreakDown()
     {
         IsDamaged = true;
-        _condition = "Требуется ремонт!";
+        Condition = "Требуется ремонт!";
     }
 }
 
