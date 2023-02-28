@@ -120,7 +120,7 @@ class Warehouse
 {
     private static Random _random = new Random();
 
-    private List<CarPart> _CarParts = new List<CarPart>();
+    private List<CarPart> _сarParts = new List<CarPart>();
 
     private int _capacity = 30;
 
@@ -137,13 +137,13 @@ class Warehouse
         carPart = null;
         bool isFound = false;
 
-        for (int i = 0; i < _CarParts.Count; i++)
+        for (int i = 0; i < _сarParts.Count; i++)
         {
-            if (_CarParts[i].Name == carPartName)
+            if (_сarParts[i].Name == carPartName)
             {
-                carPart = _CarParts[i];
+                carPart = _сarParts[i];
 
-                _CarParts.RemoveAt(i);
+                _сarParts.RemoveAt(i);
 
                 return true;
             }
@@ -165,7 +165,7 @@ class Warehouse
 
         int randomNumber = _random.Next(carParts.Length);
 
-        _CarParts.Add(carParts[randomNumber].GetClone());
+        _сarParts.Add(carParts[randomNumber].GetClone());
     }
 }
 
